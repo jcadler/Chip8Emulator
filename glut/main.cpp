@@ -1,50 +1,73 @@
+#include <cassert>
+#include <GL/freeglut.h>
+#include <iostream>
 #include <stdlib.h>
-#include <GL/glut.h>
 
 #define WINDOW_HEIGHT 320
 #define WINDOW_WIDTH 640
 
-#define PIXEL_HEIGHT 32
-#define PIXEL_WIDTH 64
+#define WINDOW_PIXEL_HEIGHT 32
+#define WINDOW_PIXEL_WIDTH 64
 
 struct screen
 {
-  bool pixels[PIXEL_WIDTH][PIXEL_HEIGHT];
+  unsigned width;
+  unsigned height;
+  bool ** pixels;
 
-  screen()
+  screen(unsigned w, unsigned h)
   {
-    for( int i=0;i<PIXEL_WIDTH;i++ )
+    width = w;
+    height = h;
+    pixels = new bool*[h];
+    for( int i=0; i < h; i++ )
       {
-	for( int j=0;j<PIXEL_HEIGHT;j++ )
+	pixels[i] = new bool[w];
+	for( int j=0; j < w; j++ )
 	  {
 	    pixels[i][j]=false;
 	  }
       }
   }
+
+public:
+  void set_pixel(int x, int y)
+  {
+    assert( x < height && y < width);
+    pixels[x][y] = true; 
+  }
+
+  void clear_pixel(int x, int y)
+  {
+    assert( x < height && y < width);
+    pixels[x][y] = true; 
+  }
 };
 
-screen scr;
+screen scr(WINDOW_PIXEL_WIDTH, WINDOW_PIXEL_HEIGHT);
 
 void render(void)
 {
+  float width_pct = 2.0/WINDOW_PIXEL_WIDTH;
+  float height_pct = 2.0/WINDOW_PIXEL_HEIGHT;
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-  for(int i=0;i++;i<PIXEL_WIDTH)
+  for(int i=0; i < WINDOW_PIXEL_HEIGHT; i++)
     {
-      for(int j=0;j++;j<PIXEL_HEIGHT)
+      for(int j=0; j < WINDOW_PIXEL_WIDTH; j++)
 	{
-	  float width_pct = 1.0/PIXEL_WIDTH;
-	  float height_pct = 1.0/PIXEL_HEIGHT;
+	  float top_x = width_pct*j-1;
+	  float top_y = 1-height_pct*i;
+	  float bot_x = top_x + width_pct;
+	  float bot_y = top_y - height_pct;
 	  if(scr.pixels[i][j])
 	    {
-	      glColor3f(1.0,1.0,1.0);
-	      glRectf(width_pct*i, height_pct*j,
-		      width_pct*i+1, height_pct*i+1);
+	      glRectf(top_x, top_y,
+		      bot_x, bot_y);
 	    }
 	}
     }
   
-  glutSwapBuffers();
+  glFlush();
 }
 
 void changeSize(int w, int h)
@@ -56,7 +79,7 @@ void changeSize(int w, int h)
 int main(int argc, char ** argv)
 {
   glutInit(&argc, argv);
-  glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+  glutInitDisplayMode(GLUT_DEPTH | GLUT_RGBA);
   glutInitWindowPosition(100,100);
   glutInitWindowSize(WINDOW_WIDTH,WINDOW_HEIGHT);
   glutCreateWindow("John's Window");
@@ -64,8 +87,11 @@ int main(int argc, char ** argv)
   glutDisplayFunc(render);
   glutReshapeFunc(changeSize);
 
-  scr.pixels[0][0]=true;
+  scr.set_pixel(0,0);
+  scr.set_pixel(31, 63);
   
-  glutMainLoop();
+
+  while(1)
+    glutMainLoopEvent();
   return 0;
 }
