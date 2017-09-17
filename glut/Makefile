@@ -1,5 +1,7 @@
+CPPFLAGS = -std=c++11
+
 all : main.o
-	g++ -o test main.o -lglut -lGLU -lGL
+	g++ $(CPPFLAGS) -o test main.o -lglut -lGLU -lGL
 
 main.o : main.cpp
-	g++ -c main.cpp 
+	g++ $(CPPFLAGS) -c main.cpp 
