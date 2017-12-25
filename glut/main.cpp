@@ -33,16 +33,26 @@ struct screen
   }
 
 public:
-  void set_pixel(int x, int y)
+  void set_pixel(unsigned x, unsigned y)
   {
     assert( x < width && y < height);
     pixels[x][y] = true; 
   }
 
-  void clear_pixel(int x, int y)
+  void clear_pixel(unsigned x, unsigned y)
   {
     assert( x < width && y < height);
     pixels[x][y] = false; 
+  }
+
+  void set_pixel_wrap(int x, int y)
+  {
+    set_pixel(abs(x % width), abs(y % height));
+  }
+
+  void clear_pixel_wrap(int x, int y)
+  {
+    clear_pixel(abs(x % width), abs(y % height));
   }
 };
 
@@ -72,6 +82,30 @@ void render(void)
   glFlush();
 }
 
+int y_global = 15;
+int x_global = 15;
+
+void processKey(unsigned char key, int x, int y)
+{
+  printf("pressed the %c key\n", key);
+  switch(key) {
+  case 't':
+    y_global--;
+    break;
+  case 'g':
+    y_global++;
+    break;
+  case 'f':
+    x_global--;
+    break;
+  case 'h':
+    x_global++;
+    break;
+  default:
+    break;
+  }
+}
+
 void changeSize(int w, int h)
 {
   if( w!=WINDOW_WIDTH || h!=WINDOW_HEIGHT)
@@ -80,28 +114,26 @@ void changeSize(int w, int h)
 
 int main(int argc, char ** argv)
 {
+  printf("hello\n");
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DEPTH | GLUT_RGBA);
-  glutInitWindowPosition(100,100);
   glutInitWindowSize(WINDOW_WIDTH,WINDOW_HEIGHT);
   glutCreateWindow("John's Window");
+  glutKeyboardFunc(processKey);
   
-  glutDisplayFunc(render);
-  glutReshapeFunc(changeSize);
-  scr.set_pixel(63,0);
-  
-  int x = 0;
-  int y = 15;
-
-  int x_prev = 0;
+  int x_prev = x_global;
+  int y_prev = y_global;
+  scr.set_pixel_wrap(x_global, y_global);
   while(1) {
-    x_prev = x;
-    if( ++x >= scr.width ) {
-      x = 0;
-    }
-    scr.set_pixel(x, y);
-    scr.clear_pixel(x_prev, y);
-    std::this_thread::sleep_for(std::chrono::seconds(1)/2.0);
+    if( x_global != x_prev || y_global != y_prev ) {
+      scr.clear_pixel_wrap(x_prev, y_prev);
+      scr.set_pixel_wrap(x_global, y_global);
+      x_prev = x_global;
+      y_prev = y_global;
+    } 
+    x_prev = x_global;
+    y_prev = y_global;
+    std::this_thread::sleep_for(std::chrono::seconds(1)/60.0);
     glutMainLoopEvent();
     render();
   }
