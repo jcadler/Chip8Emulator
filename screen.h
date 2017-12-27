@@ -1,9 +1,7 @@
+#pragma once
+
 #include <cassert>
-#include <chrono>
 #include <GL/freeglut.h>
-#include <iostream>
-#include <stdlib.h>
-#include <thread>
 
 #define WINDOW_HEIGHT 320
 #define WINDOW_WIDTH 640
@@ -121,26 +119,4 @@ screen * initWindow()
   glutKeyboardUpFunc(NULL);
 
   return new screen(WINDOW_PIXEL_WIDTH, WINDOW_PIXEL_HEIGHT);
-}
-
-int main()
-{
-  screen * scr = initWindow();
-  int x_prev = x_global;
-  int y_prev = y_global;
-  scr->set_pixel_wrap(x_global, y_global);
-  while(1) {
-    if( x_global != x_prev || y_global != y_prev ) {
-      scr->clear_pixel_wrap(x_prev, y_prev);
-      scr->set_pixel_wrap(x_global, y_global);
-      x_prev = x_global;
-      y_prev = y_global;
-    } 
-    x_prev = x_global;
-    y_prev = y_global;
-    std::this_thread::sleep_for(std::chrono::seconds(1)/60.0);
-    glutMainLoopEvent();
-    scr->render();
-  }
-
 }
