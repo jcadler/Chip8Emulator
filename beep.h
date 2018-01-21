@@ -31,13 +31,11 @@ struct sinBeep
 public:
   void play()
   {
-    printf("hello there\n");
     beep.play();
   }
 
   void pause()
   {
-    printf("general kenobi\n");
     beep.pause();
   }
 };
