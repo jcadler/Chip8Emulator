@@ -2,6 +2,6 @@
 
 int main()
 {
-  Core c;
-  c.run();
+  Core * c = initCore();
+  c->run();
 }
