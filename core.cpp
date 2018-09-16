@@ -5,12 +5,14 @@
 
 #include "beep.h"
 #include "core.h"
+#include "inst.h"
 #include "screen.h"
 #include "timer.h"
 
 class Core_impl
   : public Core
 {
+  InstructionParser * instParser;
 
   void start_beep()
   {

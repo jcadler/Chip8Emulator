@@ -1,8 +1,8 @@
-BUILD_DIR := ./build/
+BUILD_DIR := ./build
 CPPFLAGS := -std=c++11
-OBJECTS  := main.o core.o screen.o beep.o
+OBJECTS  := main.o core.o screen.o beep.o inst.o
 OBJECT_LOCS = $(addprefix $(BUILD_DIR)/, $(OBJECTS))
-SRCFILES := main.cpp core.cpp screen.cpp beep.cpp
+SRCFILES := main.cpp core.cpp screen.cpp beep.cpp inst.cpp
 DEPS = $(SRCFILES:.cpp=.d)
 
 all : $(OBJECT_LOCS)
