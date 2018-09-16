@@ -39,6 +39,16 @@ public:
     delete pixels;
   }
 
+  unsigned get_pixel_height()
+  {
+    return height;
+  }
+
+  unsigned get_pixel_width()
+  {
+    return width;
+  }
+
   void set_pixel(unsigned x, unsigned y)
   {
     assert(x < width && y < height);

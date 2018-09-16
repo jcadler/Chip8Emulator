@@ -6,8 +6,11 @@
 #define WINDOW_PIXEL_HEIGHT 32
 #define WINDOW_PIXEL_WIDTH 64
 
-struct Screen
+class Screen
 {
+ public:
+  virtual unsigned get_pixel_height() = 0;
+  virtual unsigned get_pixel_width() = 0;
   virtual void set_pixel(unsigned x, unsigned y) = 0;
   virtual void clear_pixel(unsigned x, unsigned y) = 0;
   virtual void set_pixel_wrap(int x, int y) = 0;

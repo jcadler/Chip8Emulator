@@ -8,21 +8,21 @@
 #include "screen.h"
 #include "timer.h"
 
+class Core_impl
+  : public Core
+{
 
-struct Core_impl
-  : Core {
-  Screen * disp;
-  uint8_t ram[4096];
-  uint8_t registers[16];
-  uint16_t I;
-  uint8_t SP;  // stack pointer
-  uint16_t PC = PROGRAM_START; // program counter
+  void start_beep()
+  {
+    beep_play();
+  }
 
-  Timer<60> delay_timer;
-  Timer<60> sound_timer;
-  uint8_t delay_register = 0;
-  uint8_t sound_register = 0;
-  
+  void stop_beep()
+  {
+    beep_pause();
+  }
+
+public:
   Core_impl()
   {
     disp = initWindow();
@@ -33,7 +33,6 @@ struct Core_impl
     delete disp;
   }
 
-public:
   void run()
   {
     int x_prev = x_global;
