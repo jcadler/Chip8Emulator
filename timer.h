@@ -14,7 +14,6 @@ class Timer {
     start = std::chrono::steady_clock::now();;
   }
 
-
   int tick()
   {
     int ticks = std::chrono::duration_cast<timer_tick>( std::chrono::steady_clock::now() - start ).count();
