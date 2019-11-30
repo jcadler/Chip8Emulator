@@ -1,4 +1,5 @@
-#include <cassert>
+#include <assert.h>
+#include <cmath>
 #include <GL/freeglut.h>
 
 #include "screen.h"
@@ -63,12 +64,12 @@ public:
 
   void clear_pixel_wrap(int x, int y)
   {
-    clear_pixel(abs(x % width), abs(y % height));
+    clear_pixel(std::abs((int)(x % width)), std::abs((int)(y % height)));
   }
 
   void set_pixel_wrap(int x, int y)
   {
-    set_pixel(abs(x % width), abs(y % height));
+    set_pixel(std::abs((int)(x % width)), std::abs((int)(y % height)));
   }
 
   void render()

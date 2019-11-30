@@ -1,8 +1,7 @@
 #pragma once
 
-class Screen;
-
 #include <cstdint>
+#include "screen.h"
 #include "timer.h"
 
 #define PROGRAM_START 0x200
@@ -12,7 +11,8 @@ class Core {
   Screen * disp;
   uint8_t ram[4096];
   uint8_t registers[16];
-  uint16_t I;
+  uint16_t I; // special 16 bit register
+  uint16_t stack[16];
   uint8_t SP;  // stack pointer
   uint16_t PC = PROGRAM_START; // program counter
 
